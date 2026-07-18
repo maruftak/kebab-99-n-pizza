@@ -152,5 +152,63 @@
     { id: "p-lamb-2", name: "LAMB CHOPS", price: "FROM $10.00", img: IMG + "lamb.jpg", tilt: "tilt-p" },
   ];
 
-  window.KEBAB = { MENU: MENU, SIZE_LABELS: SIZE_LABELS, POPULAR: POPULAR };
+  // ---- customization option groups -------------------------------------
+  // type: "single" (choose one) or "multi" (choose any). Options may carry a
+  // per-item `price` (added when selected). `freeLimit`+`extraPrice` price a
+  // multi group where the first N are free (used for sauces).
+  var OPTION_GROUPS = {
+    bread: { id: "bread", label: "Bread", type: "single", required: true, options: [
+      { id: "kebab-bread", label: "Kebab Bread" }, { id: "wrap", label: "Wrap" },
+      { id: "roll", label: "Roll" }, { id: "turkish", label: "Turkish Bread" } ] },
+    base: { id: "base", label: "Base", type: "single", required: true, options: [
+      { id: "rice", label: "Rice" }, { id: "chips", label: "Chips" }, { id: "half", label: "Half Rice / Half Chips" } ] },
+    meat: { id: "meat", label: "Meat Choice", type: "single", required: true, options: [
+      { id: "chicken", label: "Chicken" }, { id: "doner", label: "Doner / Lamb" }, { id: "mixed", label: "Mixed" },
+      { id: "falafel", label: "Falafel" }, { id: "halloumi", label: "Halloumi" } ] },
+    salads: { id: "salads", label: "Salads", type: "multi", note: "Pick what you'd like — all free.", options: [
+      { id: "lettuce", label: "Lettuce" }, { id: "tomato", label: "Tomato" }, { id: "onion", label: "Onion" },
+      { id: "tabouli", label: "Tabouli" }, { id: "carrot", label: "Carrot" }, { id: "cabbage", label: "Cabbage" },
+      { id: "pickles", label: "Pickles" } ] },
+    sauces: { id: "sauces", label: "Sauces", type: "multi", freeLimit: 2, extraPrice: 1,
+      note: "Choose up to 2 free · each extra +$1.00", options: [
+      { id: "garlic", label: "Garlic" }, { id: "chilli", label: "Chilli" }, { id: "bbq", label: "BBQ" },
+      { id: "hummus", label: "Hummus" }, { id: "tomato", label: "Tomato" }, { id: "sweet-chilli", label: "Sweet Chilli" },
+      { id: "mayo", label: "Mayo" }, { id: "tahini", label: "Tahini" }, { id: "mint-yogurt", label: "Mint Yogurt" } ] },
+    extras: { id: "extras", label: "Extras", type: "multi", options: [
+      { id: "extra-meat", label: "Extra Meat", price: 3.9 }, { id: "cheese", label: "Cheese", price: 2 },
+      { id: "halloumi", label: "Halloumi", price: 2.5 }, { id: "jalapenos", label: "Jalapeños", price: 1 },
+      { id: "mushroom", label: "Mushroom", price: 1.5 }, { id: "avocado", label: "Avocado", price: 2 },
+      { id: "pineapple", label: "Pineapple", price: 1.5 }, { id: "olives", label: "Olives", price: 1.5 },
+      { id: "beetroot", label: "Beetroot", price: 1.5 } ] },
+    toppings: { id: "toppings", label: "Add Toppings", type: "multi", options: [
+      { id: "jalapenos", label: "Jalapeños", price: 1.5 }, { id: "mushroom", label: "Mushroom", price: 1.5 },
+      { id: "pineapple", label: "Pineapple", price: 1.5 }, { id: "extra-cheese", label: "Extra Cheese", price: 2 },
+      { id: "olives", label: "Olives", price: 1.5 }, { id: "onion", label: "Onion", price: 1 },
+      { id: "capsicum", label: "Capsicum", price: 1.5 }, { id: "pepperoni", label: "Pepperoni", price: 2.5 } ] },
+    burgerExtras: { id: "burgerExtras", label: "Extras", type: "multi", options: [
+      { id: "cheese", label: "Cheese", price: 2 }, { id: "egg", label: "Egg", price: 2 },
+      { id: "jalapenos", label: "Jalapeños", price: 1 }, { id: "extra-patty", label: "Extra Patty", price: 5 },
+      { id: "meal", label: "Make it a Meal (chips + can)", price: 9 } ] },
+  };
+
+  // which groups apply to each category
+  var CATEGORY_GROUPS = {
+    "cat-kebabs": ["bread", "salads", "sauces", "extras"],
+    "cat-plates": ["base", "salads", "sauces", "extras"],
+    "cat-pizza": ["toppings"],
+    "cat-pide": ["toppings"],
+    "cat-deals": [],
+    "cat-snack-packs": ["meat", "sauces", "extras"],
+    "cat-burgers": ["salads", "sauces", "burgerExtras"],
+    "cat-sides": [],
+    "cat-sweets": [],
+  };
+
+  window.KEBAB = {
+    MENU: MENU,
+    SIZE_LABELS: SIZE_LABELS,
+    POPULAR: POPULAR,
+    OPTION_GROUPS: OPTION_GROUPS,
+    CATEGORY_GROUPS: CATEGORY_GROUPS,
+  };
 })();
