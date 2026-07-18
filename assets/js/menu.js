@@ -75,12 +75,17 @@
       var base = hasSizes ? item.sizes[selSize] : item.price;
       var add = 0;
       groups.forEach(function (g) {
-        if (g.type !== "multi") return;
-        var set = multi[g.id];
-        if (g.freeLimit != null) {
-          if (set.size > g.freeLimit) add += (set.size - g.freeLimit) * g.extraPrice;
-        } else {
-          g.options.forEach(function (o) { if (o.price && set.has(o.id)) add += o.price; });
+        if (g.type === "multi") {
+          var set = multi[g.id];
+          if (g.freeLimit != null) {
+            if (set.size > g.freeLimit) add += (set.size - g.freeLimit) * g.extraPrice;
+          } else {
+            g.options.forEach(function (o) { if (o.price && set.has(o.id)) add += o.price; });
+          }
+        } else if (single[g.id]) {
+          // priced single options (e.g. snack pack base swaps +$1)
+          var sel = g.options.filter(function (o) { return o.id === single[g.id]; })[0];
+          if (sel && sel.price) add += sel.price;
         }
       });
       return base + add;
@@ -276,9 +281,11 @@
     // items with nothing to configure skip the modal — one tap adds one
     var simple = !groupsFor(item, cat.id).length && !item.sizes;
     kids.push(el("span", { class: "row-cta", text: simple ? "ADD ＋" : "CUSTOMISE ＋" }));
+    var rowKids = [el("div", { class: "row-main" }, kids)];
+    if (item.img) rowKids.push(el("img", { class: "row-thumb", src: item.img, alt: "", loading: "lazy", width: "74", height: "74" }));
     var attrs = { type: "button", class: "menu-row" };
     if (!simple) attrs["aria-haspopup"] = "dialog";
-    var row = el("button", attrs, kids);
+    var row = el("button", attrs, rowKids);
     row.addEventListener("click", function () {
       if (simple) {
         Cart.add({ key: item.id, name: item.name, price: item.price, qty: 1 });

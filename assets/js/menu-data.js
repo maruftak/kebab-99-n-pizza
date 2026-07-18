@@ -21,8 +21,8 @@
         { id: "k-mixed", name: "Mixed Kebab", img: IMG + "kebab-mixed.jpg", price: 16.0 },
         { id: "k-chicken", name: "Chicken Kebab", img: IMG + "kebab-chicken.jpg", price: 16.0 },
         { id: "k-doner", name: "Doner Kebab", img: IMG + "kebab-mixed.jpg", price: 16.0 },
-        { id: "k-yiros", name: "Yiros", desc: "Tomato, onion, meat & choice of two sauces.", img: IMG + "kebab-chicken.jpg", price: 17.5 },
-        { id: "k-hsp-wrap", name: "HSP Wrap", desc: "Comes with chips and meat.", img: IMG + "snackpack.jpg", price: 17.5 },
+        { id: "k-yiros", name: "Yiros", desc: "Tomato, onion, meat & choice of two sauces.", img: IMG + "wrap.jpg", price: 17.5 },
+        { id: "k-hsp-wrap", name: "HSP Wrap", desc: "Comes with chips and meat.", img: IMG + "wrap.jpg", price: 17.5 },
         { id: "k-large-meal", name: "Large Kebab Meal", desc: "Large kebab, large chips, and large drink.", img: IMG + "kebab-mixed.jpg", price: 32.0 },
         { id: "k-small-meal", name: "Small Kebab Meal", desc: "Large kebab, small chips and small can.", img: IMG + "kebab-mixed.jpg", price: 25.0 },
         { id: "k-kids", name: "Kids Meal", desc: "5 nuggets, 1 small chips, 1 small juice.", img: IMG + "nuggets.jpg", price: 15.0 },
@@ -48,20 +48,20 @@
       name: "Pizza",
       subtitle: 'Reg 11" · Large 13" · Family 15"',
       items: [
-        { id: "z-bbq-chicken", name: "BBQ Chicken", desc: "BBQ base, marinated chicken, mushroom, capsicum, onion & mozzarella.", img: IMG + "pizza.jpg", sizes: [20.9, 24.9, 29.9] },
-        { id: "z-peri", name: "Peri-Peri Chicken", desc: "Marinated chicken, spinach, roasted red capsicum & peri peri sauce.", img: IMG + "pizza.jpg", sizes: [20.9, 24.9, 29.9] },
+        { id: "z-bbq-chicken", name: "BBQ Chicken", desc: "BBQ base, marinated chicken, mushroom, capsicum, onion, mozzarella & BBQ sauce.", img: IMG + "pizza.jpg", sizes: [20.9, 24.9, 29.9] },
+        { id: "z-peri", name: "Peri-Peri Chicken", desc: "Marinated chicken, spinach, roasted red capsicum, onion, mozzarella & peri peri sauce.", img: IMG + "pizza.jpg", sizes: [20.9, 24.9, 29.9] },
         { id: "z-pepperoni", name: "Pepperoni", desc: "Pepperoni, mozzarella & oregano.", img: IMG + "pizza.jpg", sizes: [20.9, 24.9, 29.9] },
         { id: "z-bbq-meat", name: "BBQ Meat Lovers", desc: "Pepperoni, Turkish salami, kebab meat, chicken & BBQ sauce.", img: IMG + "pizza.jpg", sizes: [20.9, 24.9, 29.9] },
-        { id: "z-supreme", name: "Supreme", desc: "Pepperoni, salami, onion, mushroom, olives & pineapple.", img: IMG + "pizza.jpg", sizes: [20.9, 24.9, 29.9] },
+        { id: "z-supreme", name: "Supreme", desc: "Pepperoni, Turkish salami, onion, mushroom, olives, pineapple & cheese.", img: IMG + "pizza.jpg", sizes: [20.9, 24.9, 29.9] },
         { id: "z-margherita", name: "Margherita", desc: "Tomato base, mozzarella & oregano.", img: IMG + "pizza.jpg", sizes: [20.9, 24.9, 29.9] },
-        { id: "z-veg", name: "Vegetarian", desc: "Feta, onion, mushroom, olives, pineapple & tomato.", img: IMG + "pizza.jpg", sizes: [20.9, 24.9, 29.9] },
+        { id: "z-veg", name: "Vegetarian", desc: "Feta cheese, onion, mushrooms, olives, pineapple, tomato & mozzarella.", img: IMG + "pizza.jpg", sizes: [20.9, 24.9, 29.9] },
         { id: "z-hawaiian", name: "Chicken Hawaiian", desc: "Marinated chicken, pineapple & cheese.", img: IMG + "pizza.jpg", sizes: [20.9, 24.9, 29.9] },
         { id: "z-garlic-cheesy", name: "Garlic Cheesy", desc: "Garlic base with mozzarella.", img: IMG + "pizza.jpg", sizes: [20.9, 24.9, 29.9] },
         { id: "z-prawn", name: "Prawn", desc: "Garlic base, mushroom, onion, capsicum, prawn & mozzarella.", img: IMG + "pizza.jpg", sizes: [20.9, 24.9, 29.9] },
         { id: "z-hsp-pizza", name: "H.S.P Pizza", desc: "Kebab meat, chips & choice of BBQ, garlic and hot chilli.", img: IMG + "pizza.jpg", sizes: [20.9, 24.9, 29.9] },
         { id: "z-seafood", name: "Seafood", desc: "Prawn, calamari, squid, rocket & mozzarella.", img: IMG + "pizza.jpg", sizes: [20.9, 24.9, 29.9] },
-        { id: "z-tandoori", name: "Tandoori Chicken", desc: "Marinated chicken, spinach, capsicum & mint yogurt dressing.", img: IMG + "pizza.jpg", sizes: [20.9, 24.9, 29.9] },
-        { id: "z-garlic-bread", name: "Garlic Bread", img: IMG + "pizza.jpg", price: 6.0 },
+        { id: "z-tandoori", name: "Tandoori Chicken", desc: "Marinated chicken, spinach, roasted red capsicum, onion, mozzarella & mint yogurt dressing.", img: IMG + "pizza.jpg", sizes: [20.9, 24.9, 29.9] },
+        { id: "z-garlic-bread", name: "Garlic Bread", img: IMG + "garlic-bread.jpg", price: 6.0 },
       ],
     },
     {
@@ -91,11 +91,11 @@
       name: "Snack Packs",
       subtitle: "Chicken / Doner / Mix / Falafel / Halloumi.",
       items: [
-        { id: "s-snack-pack", name: "Snack Pack", desc: "Chips, meat, cheese & choice of two sauces.", img: IMG + "snackpack.jpg", sizes: [16, 20, 25, 30, 35] },
+        { id: "s-snack-pack", name: "Snack Pack", desc: "Chips, meat, cheese & choice of two sauces.", img: IMG + "snackpack.jpg", sizes: [16, 20, 25, 30, 35], groups: ["meat", "spBase", "sauces", "extras"] },
         { id: "s-rice-snack-pack", name: "Rice Snack Pack", desc: "Rice, meat, cheese & choice of two sauces.", img: IMG + "snackpack.jpg", sizes: [16, 20, 25, 30, 35] },
         { id: "s-healthy-box", name: "Healthy Box", desc: "Meat, lettuce, tomato, onion, carrots, tabouli & two sauces.", img: IMG + "salad.jpg", sizes: [20, 25, 30], sizeLabels: ["Reg", "Large", "Jumbo"] },
         { id: "s-nachos", name: "KJ Nachos", desc: "Corn chips, meat, cheese, sauces & tabouli.", img: IMG + "nachos.jpg", price: 20.0 },
-        { id: "s-baked-potato", name: "Baked Potato", desc: "Garlic butter, cheese, meat, sauce, lettuce, tomato & onion.", img: IMG + "snackpack.jpg", price: 18.0 },
+        { id: "s-baked-potato", name: "Baked Potato", desc: "Garlic butter, cheese, meat, sauce, lettuce, tomato & onion.", img: IMG + "baked-potato.jpg", price: 18.0 },
       ],
     },
     {
@@ -132,7 +132,7 @@
         { id: "dr-can", name: "Soft Drink Can (375ml)", desc: "Coke, Coke Zero, Fanta, Sprite or Solo.", img: IMG + "drinks.jpg", price: 3.5 },
         { id: "dr-600", name: "Soft Drink 600ml", desc: "Coke, Coke Zero, Fanta, Sprite or Solo.", img: IMG + "drinks.jpg", price: 5.0 },
         { id: "dr-125", name: "Soft Drink 1.25L", desc: "Coke, Coke Zero, Fanta, Sprite or Solo.", img: IMG + "drinks.jpg", price: 6.0 },
-        { id: "dr-water", name: "Spring Water 600ml", img: IMG + "drinks.jpg", price: 3.0, groups: [] },
+        { id: "dr-water", name: "Spring Water 600ml", img: IMG + "water.jpg", price: 3.0, groups: [] },
       ],
     },
     {
@@ -140,8 +140,8 @@
       name: "Sweets & Extras",
       items: [
         { id: "sw-baklava", name: "Baklava", img: IMG + "baklava.jpg", price: 7.0 },
-        { id: "sw-turkish-3", name: "Turkish Delights (3)", img: IMG + "baklava.jpg", price: 3.0 },
-        { id: "sw-turkish-5", name: "Turkish Delights (5)", img: IMG + "baklava.jpg", price: 5.0 },
+        { id: "sw-turkish-3", name: "Turkish Delights (3)", img: IMG + "turkish-delight.jpg", price: 3.0 },
+        { id: "sw-turkish-5", name: "Turkish Delights (5)", img: IMG + "turkish-delight.jpg", price: 5.0 },
         { id: "ex-meat", name: "Extra Meat", img: IMG + "kebab-mixed.jpg", price: 3.9 },
         { id: "ex-halloumi", name: "Extra Halloumi", img: IMG + "snackpack.jpg", price: 2.5 },
         { id: "ex-avocado", name: "Extra Avocado", img: IMG + "salad.jpg", price: 2.0 },
@@ -176,33 +176,31 @@
     meat: { id: "meat", label: "Meat Choice", type: "single", required: true, options: [
       { id: "chicken", label: "Chicken" }, { id: "doner", label: "Doner / Lamb" }, { id: "mixed", label: "Mixed" },
       { id: "falafel", label: "Falafel" }, { id: "halloumi", label: "Halloumi" } ] },
+    // Base swap for the classic Snack Pack ("half rice & half chips" board).
+    spBase: { id: "spBase", label: "Base", type: "single", required: true, options: [
+      { id: "chips", label: "Chips (standard)" },
+      { id: "half-rice-chips", label: "Half Rice / Half Chips", price: 1 },
+      { id: "half-salad", label: "Half Salad / Half Rice or Chips", price: 1 } ] },
     salads: { id: "salads", label: "Salads", type: "multi", defaults: ["lettuce", "tomato", "onion"],
       note: "Comes with lettuce, tomato & onion — tap to change. All free.", options: [
       { id: "lettuce", label: "Lettuce" }, { id: "tomato", label: "Tomato" }, { id: "onion", label: "Onion" },
-      { id: "tabouli", label: "Tabouli" }, { id: "carrot", label: "Carrot" }, { id: "cabbage", label: "Cabbage" },
-      { id: "pickles", label: "Pickles" } ] },
+      { id: "carrot", label: "Carrot" } ] },
     sauces: { id: "sauces", label: "Sauces", type: "multi", freeLimit: 2, extraPrice: 1,
       note: "Choose up to 2 free · each extra +$1.00", options: [
       { id: "garlic", label: "Garlic" }, { id: "chilli", label: "Chilli" }, { id: "bbq", label: "BBQ" },
       { id: "hummus", label: "Hummus" }, { id: "tomato", label: "Tomato" }, { id: "sweet-chilli", label: "Sweet Chilli" },
       { id: "mayo", label: "Mayo" }, { id: "tahini", label: "Tahini" }, { id: "mint-yogurt", label: "Mint Yogurt" } ] },
+    // Prices match the printed EXTRAS board exactly.
     extras: { id: "extras", label: "Extras", type: "multi", options: [
-      { id: "extra-meat", label: "Extra Meat", price: 3.9 }, { id: "cheese", label: "Cheese", price: 2 },
-      { id: "halloumi", label: "Halloumi", price: 2.5 }, { id: "jalapenos", label: "Jalapeños", price: 1 },
-      { id: "mushroom", label: "Mushroom", price: 1.5 }, { id: "avocado", label: "Avocado", price: 2 },
-      { id: "pineapple", label: "Pineapple", price: 1.5 }, { id: "olives", label: "Olives", price: 1.5 },
+      { id: "extra-meat", label: "Extra Meat", price: 3.9 }, { id: "halloumi", label: "Halloumi", price: 2.5 },
+      { id: "avocado", label: "Avocado", price: 2 }, { id: "cheese", label: "Cheese", price: 2 },
+      { id: "mushrooms", label: "Mushrooms", price: 1.5 }, { id: "pineapple", label: "Pineapple", price: 1.5 },
+      { id: "tabouli", label: "Tabouli", price: 1.5 }, { id: "olives", label: "Olives", price: 1.5 },
       { id: "beetroot", label: "Beetroot", price: 1.5 } ] },
-    toppings: { id: "toppings", label: "Add Toppings", type: "multi", options: [
-      { id: "jalapenos", label: "Jalapeños", price: 1.5 }, { id: "mushroom", label: "Mushroom", price: 1.5 },
-      { id: "pineapple", label: "Pineapple", price: 1.5 }, { id: "extra-cheese", label: "Extra Cheese", price: 2 },
-      { id: "olives", label: "Olives", price: 1.5 }, { id: "onion", label: "Onion", price: 1 },
-      { id: "capsicum", label: "Capsicum", price: 1.5 }, { id: "pepperoni", label: "Pepperoni", price: 2.5 } ] },
     flavour: { id: "flavour", label: "Flavour", type: "single", required: true, options: [
       { id: "coke", label: "Coke" }, { id: "coke-zero", label: "Coke Zero" }, { id: "fanta", label: "Fanta" },
       { id: "sprite", label: "Sprite" }, { id: "solo", label: "Solo" } ] },
-    burgerExtras: { id: "burgerExtras", label: "Extras", type: "multi", options: [
-      { id: "cheese", label: "Cheese", price: 2 }, { id: "egg", label: "Egg", price: 2 },
-      { id: "jalapenos", label: "Jalapeños", price: 1 }, { id: "extra-patty", label: "Extra Patty", price: 5 },
+    burgerMeal: { id: "burgerMeal", label: "Meal Deal", type: "multi", options: [
       { id: "meal", label: "Make it a Meal (chips + can)", price: 9 } ] },
   };
 
@@ -210,11 +208,11 @@
   var CATEGORY_GROUPS = {
     "cat-kebabs": ["bread", "salads", "sauces", "extras"],
     "cat-plates": ["base", "salads", "sauces", "extras"],
-    "cat-pizza": ["toppings"],
-    "cat-pide": ["toppings"],
+    "cat-pizza": ["extras"],
+    "cat-pide": ["extras"],
     "cat-deals": [],
     "cat-snack-packs": ["meat", "sauces", "extras"],
-    "cat-burgers": ["salads", "sauces", "burgerExtras"],
+    "cat-burgers": ["salads", "sauces", "extras", "burgerMeal"],
     "cat-sides": [],
     "cat-drinks": ["flavour"],
     "cat-sweets": [],
