@@ -14,7 +14,8 @@
   var BANNER = {
     "cat-kebabs": "kebab-chicken.jpg", "cat-plates": "lamb.jpg", "cat-pizza": "pizza.jpg",
     "cat-pide": "pide.jpg", "cat-deals": "nachos.jpg", "cat-snack-packs": "snackpack.jpg",
-    "cat-burgers": "burger.jpg", "cat-sides": "fries.jpg", "cat-sweets": "baklava.jpg",
+    "cat-burgers": "burger.jpg", "cat-sides": "fries.jpg", "cat-drinks": "drinks.jpg",
+    "cat-sweets": "baklava.jpg",
   };
 
   function money(n) { return "$" + Number(n).toFixed(2); }
@@ -38,8 +39,11 @@
     return KEBAB.SIZE_LABELS[item.sizes.length] || item.sizes.map(function (_, i) { return "Opt " + (i + 1); });
   }
 
-  function groupsFor(catId) {
-    return (KEBAB.CATEGORY_GROUPS[catId] || []).map(function (id) { return KEBAB.OPTION_GROUPS[id]; }).filter(Boolean);
+  // Item-level `groups` overrides the category default (e.g. water skips the
+  // flavour picker its drinks siblings use).
+  function groupsFor(item, catId) {
+    var ids = item.groups || KEBAB.CATEGORY_GROUPS[catId] || [];
+    return ids.map(function (id) { return KEBAB.OPTION_GROUPS[id]; }).filter(Boolean);
   }
 
   // ---------------------------------------------------------------- toast --
@@ -55,15 +59,16 @@
 
   // ---------------------------------------------------------------- modal --
   function openModal(item, cat, trigger) {
-    var groups = groupsFor(cat.id);
+    var groups = groupsFor(item, cat.id);
     var hasSizes = !!item.sizes;
     var selSize = 0;
     var single = {}; // groupId -> optionId (required singles default to first)
     var multi = {};  // groupId -> Set of optionIds
     var qty = 1;
+    var openScrollY = window.scrollY;
     groups.forEach(function (g) {
       if (g.type === "single") single[g.id] = g.required ? g.options[0].id : null;
-      else multi[g.id] = new Set();
+      else multi[g.id] = new Set(g.defaults || []);
     });
 
     function unitPrice() {
@@ -127,6 +132,20 @@
       return btn;
     }
 
+    // For free-limit groups (sauces): once the free picks are used, unselected
+    // pills grow a "+$1.00" badge so the upcharge is visible before tapping.
+    function syncFreeBadges(g, list) {
+      if (g.freeLimit == null) return;
+      var atLimit = multi[g.id].size >= g.freeLimit;
+      Array.prototype.forEach.call(list.children, function (btn, i) {
+        var old = btn.querySelector(".op-price");
+        if (old) old.remove();
+        if (atLimit && !multi[g.id].has(g.options[i].id)) {
+          btn.appendChild(el("span", { class: "op-price", text: "+" + money(g.extraPrice) }));
+        }
+      });
+    }
+
     function renderGroup(g) {
       var wrap = el("div", { class: "opt-group" }, [el("h3", { text: g.label + (g.required ? " *" : "") })]);
       var note = g.note || (g.type === "single" && g.required ? "Choose one" : "");
@@ -146,11 +165,13 @@
             var set = multi[g.id];
             if (set.has(o.id)) set.delete(o.id); else set.add(o.id);
             btn.setAttribute("aria-pressed", set.has(o.id) ? "true" : "false");
+            syncFreeBadges(g, list);
           }
           recompute();
         }, g.type === "single");
         list.appendChild(btn);
       });
+      syncFreeBadges(g, list);
       wrap.appendChild(list);
       return wrap;
     }
@@ -208,6 +229,8 @@
       document.body.classList.remove("modal-open");
       document.removeEventListener("keydown", onKey);
       backdrop.remove();
+      // some browsers drop the scroll position when body overflow unlocks
+      window.scrollTo(0, openScrollY);
       if (trigger && trigger.focus) trigger.focus();
     }
     function focusables() {
@@ -250,10 +273,20 @@
       ]),
     ];
     if (item.desc) kids.push(el("p", { class: "row-desc", text: item.desc }));
-    var cta = groupsFor(cat.id).length || item.sizes ? "CUSTOMISE ＋" : "ADD ＋";
-    kids.push(el("span", { class: "row-cta", text: cta }));
-    var row = el("button", { type: "button", class: "menu-row", "aria-haspopup": "dialog" }, kids);
-    row.addEventListener("click", function () { openModal(item, cat, row); });
+    // items with nothing to configure skip the modal — one tap adds one
+    var simple = !groupsFor(item, cat.id).length && !item.sizes;
+    kids.push(el("span", { class: "row-cta", text: simple ? "ADD ＋" : "CUSTOMISE ＋" }));
+    var attrs = { type: "button", class: "menu-row" };
+    if (!simple) attrs["aria-haspopup"] = "dialog";
+    var row = el("button", attrs, kids);
+    row.addEventListener("click", function () {
+      if (simple) {
+        Cart.add({ key: item.id, name: item.name, price: item.price, qty: 1 });
+        showToast("Added " + item.name + " to cart");
+      } else {
+        openModal(item, cat, row);
+      }
+    });
     return row;
   }
 

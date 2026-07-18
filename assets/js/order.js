@@ -8,11 +8,24 @@
   if (!Cart) return;
 
   var SERVICE_FEE = 1.5;
-  var TRACK = [
-    { icon: "🧾", label: "Received", msg: "We've got your order — the kitchen is up next." },
-    { icon: "🔥", label: "Preparing", msg: "Your food is on the grill right now. 🔥" },
-    { icon: "📦", label: "Ready", msgPickup: "Ready for pickup at the counter!", msgDelivery: "Packed up and heading out for delivery." },
-    { icon: "✅", label: "Completed", msg: "Enjoy your feed! 🎉" },
+  var DELIVERY_FEE = 5.0;
+  var DELIVERY_MIN = 25.0;
+  var PICKUP_ETA_MIN = 20; // minutes until ready
+  var DELIVERY_ETA_MIN = 50; // minutes until delivered
+  var UNDO_WINDOW_MS = 6000;
+
+  // `at` = seconds after the order is placed when the stage begins.
+  var TRACK_PICKUP = [
+    { icon: "🧾", label: "Received", msg: "We've got your order — the kitchen is up next.", at: 0 },
+    { icon: "🔥", label: "Preparing", msg: "Your food is on the grill right now. 🔥", at: 30 },
+    { icon: "🛍️", label: "Ready", msg: "Ready for pickup at the counter!", at: 15 * 60 },
+    { icon: "✅", label: "Picked up", msg: "Enjoy your feed! 🎉", at: 25 * 60 },
+  ];
+  var TRACK_DELIVERY = [
+    { icon: "🧾", label: "Received", msg: "We've got your order — the kitchen is up next.", at: 0 },
+    { icon: "🔥", label: "Preparing", msg: "Your food is on the grill right now. 🔥", at: 30 },
+    { icon: "🛵", label: "Out for delivery", msg: "Your driver is on the way with your order.", at: 20 * 60 },
+    { icon: "✅", label: "Delivered", msg: "Enjoy your feed! 🎉", at: 40 * 60 },
   ];
 
   var state = {
@@ -21,15 +34,19 @@
     name: "",
     phone: "",
     address: "",
+    notes: "",
     // payment — memory only, never persisted
     card: "",
     expiry: "",
     cvc: "",
     orderNumber: null,
     orderMode: "",
+    order: null, // snapshot of the placed order for the receipt
     trackIdx: 0,
+    lastRemoved: null,
   };
   var trackTimer = null;
+  var undoTimer = null;
 
   // --------------------------------------------------------------- utils ---
   function money(n) { return "$" + Number(n).toFixed(2); }
@@ -59,7 +76,10 @@
 
   function canPlace() {
     if (!validName(state.name) || !validPhone(state.phone)) return false;
-    if (state.mode === "delivery" && !validAddress(state.address)) return false;
+    if (state.mode === "delivery") {
+      if (!validAddress(state.address)) return false;
+      if (totals().subtotal < DELIVERY_MIN) return false;
+    }
     return validCard(state.card) && validExpiry(state.expiry) && validCvc(state.cvc);
   }
 
@@ -68,7 +88,16 @@
     var cart = Cart.get();
     var subtotal = cart.reduce(function (s, i) { return s + i.qty * i.price; }, 0);
     var fee = cart.length ? SERVICE_FEE : 0;
-    return { cart: cart, subtotal: subtotal, fee: fee, total: subtotal + fee };
+    var deliveryFee = cart.length && state.mode === "delivery" ? DELIVERY_FEE : 0;
+    return { cart: cart, subtotal: subtotal, fee: fee, deliveryFee: deliveryFee, total: subtotal + fee + deliveryFee };
+  }
+
+  function fmtTime(ts) {
+    var d = new Date(ts);
+    var h = d.getHours(), m = d.getMinutes();
+    var ap = h >= 12 ? "PM" : "AM";
+    h = h % 12 || 12;
+    return h + ":" + (m < 10 ? "0" : "") + m + " " + ap;
   }
 
   // ------------------------------------------------------------- render -----
@@ -108,6 +137,18 @@
     h1.appendChild(el("span", { class: "mark tilt-n", text: "CART" }));
     left.appendChild(h1);
 
+    if (state.lastRemoved) {
+      var undo = el("div", { class: "undo-bar" }, [el("span", { text: "Removed " + state.lastRemoved.name })]);
+      var undoBtn = el("button", { type: "button", text: "UNDO" });
+      undoBtn.addEventListener("click", function () {
+        var line = state.lastRemoved;
+        clearUndo();
+        Cart.add(line); // re-render happens via the cart subscription
+      });
+      undo.appendChild(undoBtn);
+      left.appendChild(undo);
+    }
+
     if (t.cart.length) {
       var list = el("div", { class: "stack" });
       list.style.gap = "14px";
@@ -130,6 +171,8 @@
       el("h2", { text: "ORDER SUMMARY" }),
       summaryRow("Subtotal", money(t.subtotal)),
       summaryRow("Service fee", money(t.fee)),
+      el("p", { class: "fee-note", text: "Service fee covers packaging & online card processing." }),
+      el("p", { class: "fee-note", text: "Delivery? " + money(DELIVERY_FEE) + " fee · " + money(DELIVERY_MIN) + " minimum — added at checkout." }),
       el("div", { class: "rule" }),
       el("div", { class: "total" }, [el("span", { text: "TOTAL" }), el("span", { text: money(t.total) })]),
     ]);
@@ -149,6 +192,11 @@
     return el("div", { class: "row" }, [el("span", { text: label }), el("span", { text: val })]);
   }
 
+  function clearUndo() {
+    state.lastRemoved = null;
+    clearTimeout(undoTimer);
+  }
+
   function renderLine(line) {
     var info = el("div", null, [
       el("div", { class: "lname", text: line.name }),
@@ -163,7 +211,16 @@
 
     var lineTotal = el("div", { class: "ltotal", text: money(line.price * line.qty) });
     var remove = el("button", { type: "button", class: "remove", "aria-label": "Remove " + line.name, text: "✕" });
-    remove.addEventListener("click", function () { Cart.remove(line.key); });
+    remove.addEventListener("click", function () {
+      // keep the removed line around briefly so a misclick can be undone
+      state.lastRemoved = line;
+      clearTimeout(undoTimer);
+      undoTimer = setTimeout(function () {
+        state.lastRemoved = null;
+        if (state.stage === "cart") render();
+      }, UNDO_WINDOW_MS);
+      Cart.remove(line.key);
+    });
 
     var controls = el("div", null, [qty]);
     controls.style.display = "flex";
@@ -197,6 +254,9 @@
     pickup.addEventListener("click", function () { if (state.mode !== "pickup") { state.mode = "pickup"; render(); } });
     delivery.addEventListener("click", function () { if (state.mode !== "delivery") { state.mode = "delivery"; render(); } });
     head.appendChild(el("div", { class: "mode-toggle" }, [pickup, delivery]));
+    head.appendChild(el("p", { class: "mode-hint", text: state.mode === "pickup"
+      ? "🕐 Usually ready in 15–25 min"
+      : "🛵 Delivery in 45–60 min · " + money(DELIVERY_FEE) + " delivery fee · " + money(DELIVERY_MIN) + " minimum order" }));
     left.appendChild(head);
 
     // details
@@ -207,6 +267,7 @@
     if (state.mode === "delivery") {
       dfields.appendChild(textField("address", "Delivery address", state.address, validAddress, "Enter your delivery address"));
     }
+    dfields.appendChild(notesField());
     details.appendChild(dfields);
     left.appendChild(details);
 
@@ -237,8 +298,15 @@
     });
     sum.appendChild(lines);
     sum.appendChild(summaryRow("Service fee", money(t.fee)));
+    if (t.deliveryFee) sum.appendChild(summaryRow("Delivery fee", money(t.deliveryFee)));
     sum.appendChild(el("div", { class: "rule" }));
     sum.appendChild(el("div", { class: "total" }, [el("span", { text: "TOTAL" }), el("span", { text: money(t.total) })]));
+
+    if (state.mode === "delivery" && t.subtotal < DELIVERY_MIN) {
+      var short = el("p", { class: "field-error", text: "Delivery minimum is " + money(DELIVERY_MIN) + " before fees — add " + money(DELIVERY_MIN - t.subtotal) + " more to your cart." });
+      short.style.marginBottom = "14px";
+      sum.appendChild(short);
+    }
 
     var place = el("button", { type: "button", class: "btn btn-red btn-block", text: "PLACE ORDER — " + money(t.total), disabled: !canPlace() });
     place.id = "place-btn";
@@ -291,6 +359,14 @@
     return formatField("card", "Card number", state.card, validCard, "Enter a valid card number", formatCard);
   }
 
+  // free-text kitchen notes — optional, never gates the place button
+  function notesField() {
+    var ta = el("textarea", { placeholder: "Order notes (optional) — e.g. no onion, extra crispy chips", "aria-label": "Order notes", maxlength: "300", rows: "2" });
+    ta.value = state.notes;
+    ta.addEventListener("input", function () { state.notes = ta.value; });
+    return el("div", null, [ta]);
+  }
+
   function autoComplete(key) {
     return { name: "name", phone: "tel", address: "street-address", card: "cc-number", expiry: "cc-exp", cvc: "cc-csc" }[key] || "off";
   }
@@ -307,23 +383,45 @@
   function formatCvc(v) { return digits(v).slice(0, 4); }
 
   // ---- place order ----
+  function trackSteps() {
+    return state.orderMode === "Delivery" ? TRACK_DELIVERY : TRACK_PICKUP;
+  }
+
+  // advance the tracker on each stage's own schedule (`at` seconds after placement)
+  function scheduleTrack() {
+    clearTimeout(trackTimer);
+    var steps = trackSteps();
+    var next = state.trackIdx + 1;
+    if (next >= steps.length || !state.order) return;
+    var dueIn = state.order.placedAt + steps[next].at * 1000 - Date.now();
+    trackTimer = setTimeout(function () {
+      state.trackIdx = next;
+      if (state.stage === "confirmed") render();
+      scheduleTrack();
+    }, Math.max(0, dueIn));
+  }
+
   function placeOrder() {
-    var num = "K99-" + Math.floor(1000 + Math.random() * 9000);
-    state.orderNumber = num;
+    var t = totals();
+    state.orderNumber = "K99-" + Math.floor(1000 + Math.random() * 9000);
     state.orderMode = state.mode === "delivery" ? "Delivery" : "Pickup";
+    state.order = {
+      lines: t.cart, subtotal: t.subtotal, fee: t.fee, deliveryFee: t.deliveryFee, total: t.total,
+      name: state.name.trim(), phone: state.phone.trim(),
+      address: state.mode === "delivery" ? state.address.trim() : "",
+      notes: state.notes.trim(),
+      placedAt: Date.now(),
+      etaAt: Date.now() + (state.mode === "delivery" ? DELIVERY_ETA_MIN : PICKUP_ETA_MIN) * 60000,
+    };
     // wipe payment details from memory — never stored, never sent
     state.card = state.expiry = state.cvc = "";
+    clearUndo();
     Cart.clear();
     state.stage = "confirmed";
     state.trackIdx = 0;
     render();
     window.scrollTo(0, 0);
-    clearInterval(trackTimer);
-    trackTimer = setInterval(function () {
-      if (state.trackIdx >= TRACK.length - 1) { clearInterval(trackTimer); return; }
-      state.trackIdx += 1;
-      render();
-    }, 3000);
+    scheduleTrack();
   }
 
   // ---- confirmed stage ----
@@ -348,16 +446,23 @@
     wrap.appendChild(el("h1", { text: "ORDER CONFIRMED!" }));
     wrap.appendChild(el("p", { class: "meta", text: "Order #" + state.orderNumber + " · " + state.orderMode }));
 
+    var o = state.order;
+    if (o) {
+      var etaLabel = state.orderMode === "Delivery" ? "Estimated delivery" : "Estimated ready for pickup";
+      wrap.appendChild(el("p", { class: "eta-pill", text: "🕐 " + etaLabel + ": ~" + fmtTime(o.etaAt) }));
+    }
+
     // tracking
+    var steps = trackSteps();
     var track = el("div", { class: "track" }, [el("h2", { text: "📦 ORDER TRACKING" })]);
     var lineWrap = el("div", { class: "track-line" });
-    var pct = (state.trackIdx / (TRACK.length - 1)) * 100;
+    var pct = (state.trackIdx / (steps.length - 1)) * 100;
     var bar = el("div", { class: "bar" });
     var fill = el("div", { class: "fill" });
     fill.style.width = pct + "%";
     lineWrap.appendChild(bar);
     lineWrap.appendChild(fill);
-    TRACK.forEach(function (step, i) {
+    steps.forEach(function (step, i) {
       var on = i <= state.trackIdx;
       lineWrap.appendChild(el("div", { class: "track-step" + (on ? " on" : "") }, [
         el("div", { class: "dot", text: step.icon }),
@@ -365,17 +470,36 @@
       ]));
     });
     track.appendChild(lineWrap);
-
-    var cur = TRACK[state.trackIdx];
-    var msg = cur.msg || (state.orderMode === "Delivery" ? cur.msgDelivery : cur.msgPickup);
-    track.appendChild(el("p", { class: "track-msg", text: msg }));
+    track.appendChild(el("p", { class: "track-msg", text: steps[state.trackIdx].msg }));
     wrap.appendChild(track);
 
-    wrap.appendChild(el("a", { class: "link-underline", href: "menu.html", text: "← Order something else" }));
-    wrap.firstChild; // noop
-    var backLink = wrap.lastChild;
+    // receipt — everything the customer needs after closing the tab
+    if (o) {
+      var rec = el("div", { class: "receipt" }, [el("h2", { text: "🧾 YOUR RECEIPT" })]);
+      o.lines.forEach(function (line) {
+        rec.appendChild(el("div", { class: "rrow" }, [
+          el("span", { text: line.qty + "× " + line.name }),
+          el("span", { text: money(line.price * line.qty) }),
+        ]));
+      });
+      rec.appendChild(el("div", { class: "rule" }));
+      rec.appendChild(el("div", { class: "rrow" }, [el("span", { text: "Subtotal" }), el("span", { text: money(o.subtotal) })]));
+      rec.appendChild(el("div", { class: "rrow" }, [el("span", { text: "Service fee" }), el("span", { text: money(o.fee) })]));
+      if (o.deliveryFee) rec.appendChild(el("div", { class: "rrow" }, [el("span", { text: "Delivery fee" }), el("span", { text: money(o.deliveryFee) })]));
+      rec.appendChild(el("div", { class: "rtotal" }, [el("span", { text: "TOTAL PAID" }), el("span", { text: money(o.total) })]));
+      rec.appendChild(el("div", { class: "rule" }));
+      rec.appendChild(el("p", { class: "rmeta", text: state.orderMode === "Delivery"
+        ? "🛵 Delivering to: " + o.address
+        : "🛍️ Pickup at the counter — Kebab 99 N Pizza" }));
+      rec.appendChild(el("p", { class: "rmeta", text: "👤 " + o.name + " · " + o.phone }));
+      if (o.notes) rec.appendChild(el("p", { class: "rmeta", text: "📝 " + o.notes }));
+      wrap.appendChild(rec);
+    }
+
+    var backLink = el("a", { class: "link-underline", href: "menu.html", text: "← Order something else" });
     backLink.style.display = "inline-block";
     backLink.style.marginTop = "30px";
+    wrap.appendChild(backLink);
     return wrap;
   }
 
@@ -385,5 +509,5 @@
     if (state.stage === "cart") render();
   });
 
-  window.addEventListener("beforeunload", function () { clearInterval(trackTimer); });
+  window.addEventListener("beforeunload", function () { clearTimeout(trackTimer); clearTimeout(undoTimer); });
 })();

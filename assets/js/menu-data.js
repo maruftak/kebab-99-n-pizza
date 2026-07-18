@@ -125,6 +125,17 @@
       ],
     },
     {
+      id: "cat-drinks",
+      name: "Drinks",
+      subtitle: "Cold from the fridge.",
+      items: [
+        { id: "dr-can", name: "Soft Drink Can (375ml)", desc: "Coke, Coke Zero, Fanta, Sprite or Solo.", img: IMG + "drinks.jpg", price: 3.5 },
+        { id: "dr-600", name: "Soft Drink 600ml", desc: "Coke, Coke Zero, Fanta, Sprite or Solo.", img: IMG + "drinks.jpg", price: 5.0 },
+        { id: "dr-125", name: "Soft Drink 1.25L", desc: "Coke, Coke Zero, Fanta, Sprite or Solo.", img: IMG + "drinks.jpg", price: 6.0 },
+        { id: "dr-water", name: "Spring Water 600ml", img: IMG + "drinks.jpg", price: 3.0, groups: [] },
+      ],
+    },
+    {
       id: "cat-sweets",
       name: "Sweets & Extras",
       items: [
@@ -165,7 +176,8 @@
     meat: { id: "meat", label: "Meat Choice", type: "single", required: true, options: [
       { id: "chicken", label: "Chicken" }, { id: "doner", label: "Doner / Lamb" }, { id: "mixed", label: "Mixed" },
       { id: "falafel", label: "Falafel" }, { id: "halloumi", label: "Halloumi" } ] },
-    salads: { id: "salads", label: "Salads", type: "multi", note: "Pick what you'd like — all free.", options: [
+    salads: { id: "salads", label: "Salads", type: "multi", defaults: ["lettuce", "tomato", "onion"],
+      note: "Comes with lettuce, tomato & onion — tap to change. All free.", options: [
       { id: "lettuce", label: "Lettuce" }, { id: "tomato", label: "Tomato" }, { id: "onion", label: "Onion" },
       { id: "tabouli", label: "Tabouli" }, { id: "carrot", label: "Carrot" }, { id: "cabbage", label: "Cabbage" },
       { id: "pickles", label: "Pickles" } ] },
@@ -185,6 +197,9 @@
       { id: "pineapple", label: "Pineapple", price: 1.5 }, { id: "extra-cheese", label: "Extra Cheese", price: 2 },
       { id: "olives", label: "Olives", price: 1.5 }, { id: "onion", label: "Onion", price: 1 },
       { id: "capsicum", label: "Capsicum", price: 1.5 }, { id: "pepperoni", label: "Pepperoni", price: 2.5 } ] },
+    flavour: { id: "flavour", label: "Flavour", type: "single", required: true, options: [
+      { id: "coke", label: "Coke" }, { id: "coke-zero", label: "Coke Zero" }, { id: "fanta", label: "Fanta" },
+      { id: "sprite", label: "Sprite" }, { id: "solo", label: "Solo" } ] },
     burgerExtras: { id: "burgerExtras", label: "Extras", type: "multi", options: [
       { id: "cheese", label: "Cheese", price: 2 }, { id: "egg", label: "Egg", price: 2 },
       { id: "jalapenos", label: "Jalapeños", price: 1 }, { id: "extra-patty", label: "Extra Patty", price: 5 },
@@ -201,6 +216,7 @@
     "cat-snack-packs": ["meat", "sauces", "extras"],
     "cat-burgers": ["salads", "sauces", "burgerExtras"],
     "cat-sides": [],
+    "cat-drinks": ["flavour"],
     "cat-sweets": [],
   };
 
