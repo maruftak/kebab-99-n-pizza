@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Menu — Kebab 99 N Pizza</title>
+  <meta name="description" content="Full menu: kebabs, plates, stone-baked pizza, pide, snack packs, burgers, sides and sweets. Build your order online." />
+  <meta name="theme-color" content="#e02d26" />
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <a href="#main" class="visually-hidden">Skip to content</a>
+
+  <header>
+    <nav class="nav" aria-label="Main">
+      <a class="brand" href="index.html">KEBAB <span class="n99">99</span> <span class="sub">N PIZZA</span></a>
+      <button class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="navlinks" aria-label="Toggle navigation">☰</button>
+      <div class="nav-links" id="navlinks" data-nav-links>
+        <a href="index.html">Home</a>
+        <a href="menu.html" aria-current="page">Menu</a>
+        <a href="contact.html">Contact</a>
+        <a class="nav-cart" href="order.html">🛒 Cart<span data-cart-badge></span></a>
+      </div>
+    </nav>
+    <nav class="cat-rail" id="cat-rail" aria-label="Menu categories"></nav>
+  </header>
+
+  <main id="main">
+    <header class="wrap page-head">
+      <h1>THE <span class="mark tilt-n">MENU</span></h1>
+      <p>Pick a size, load your extras, build your order. Easy as.</p>
+    </header>
+
+    <div class="wrap" id="menu-root">
+      <p style="padding: 40px 0; color: var(--text-soft); font-weight: 600">Loading the menu…</p>
+    </div>
+
+    <div style="height: 70px"></div>
+  </main>
+
+  <footer class="footer-simple">© 2026 Kebab 99 N Pizza · Made in Australia 🇦🇺</footer>
+
+  <!-- live region for cart feedback -->
+  <div id="toast-root" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- sticky cart bar (shown when cart has items) -->
+  <div class="cart-bar" id="cart-bar" hidden>
+    <div class="count"><span id="cart-bar-count">0 ITEM(S)</span> · <span class="amt" id="cart-bar-total">$0.00</span></div>
+    <a href="order.html" class="btn btn-red" style="font-size: 16px; padding: 12px 26px">VIEW CART →</a>
+  </div>
+
+  <script src="assets/js/menu-data.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/menu.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

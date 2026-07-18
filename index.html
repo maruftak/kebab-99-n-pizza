@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kebab 99 N Pizza — Order Online</title>
+  <meta name="description" content="Kebabs, stone-baked pizza, HSP, snack packs and lamb chops — order online for pickup or delivery. Fresh, fast, made to order." />
+  <meta name="theme-color" content="#e02d26" />
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet" />
+  <link rel="preload" as="image" href="assets/img/hero.jpg" fetchpriority="high" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <a href="#main" class="visually-hidden">Skip to content</a>
+
+  <header>
+    <div class="topbar">
+      FAMILY DEALS — 1.25L DRINK INCLUDED FREE 🥤
+      <a href="menu.html#cat-deals">See deals →</a>
+    </div>
+    <nav class="nav" aria-label="Main">
+      <a class="brand" href="index.html">KEBAB <span class="n99">99</span> <span class="sub">N PIZZA</span></a>
+      <button class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="navlinks" aria-label="Toggle navigation">☰</button>
+      <div class="nav-links" id="navlinks" data-nav-links>
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="contact.html">Contact</a>
+        <a class="nav-cart" href="order.html">🛒 Cart<span data-cart-badge></span></a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- hero -->
+    <section class="wrap hero" aria-labelledby="hero-heading">
+      <div class="anim-fade">
+        <span class="tag hero-eyebrow">LOCAL • FRESH • MADE TO ORDER</span>
+        <h1 class="hero-title" id="hero-heading">
+          KEBABS.<br />
+          <span style="color: var(--red)">PIZZA.</span><br />
+          <span class="stroke">DONE RIGHT.</span>
+        </h1>
+        <p class="hero-lede">
+          Snack packs from <strong>$16</strong>, stone-baked pizzas, HSP wraps and lamb
+          chops — order online, skip the queue, eat like a legend.
+        </p>
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center">
+          <a href="menu.html" class="btn btn-red">ORDER NOW</a>
+          <a href="menu.html" class="btn btn-white">SEE THE MENU</a>
+        </div>
+        <p class="hero-rating" style="margin-top: 28px">★★★★★ <span>rated by hungry locals</span></p>
+      </div>
+
+      <div class="hero-media anim-fade-slow">
+        <div class="hero-frame">
+          <img src="assets/img/hero.jpg" width="1200" height="1400" alt="Loaded halal snack pack with kebab meat, chips and sauces" fetchpriority="high" />
+          <span class="hero-badge">HSP WRAP $17.50</span>
+        </div>
+        <svg class="hero-seal spin" width="118" height="118" viewBox="0 0 120 120" aria-hidden="true">
+          <defs>
+            <path id="circlePath" d="M 60,60 m -44,0 a 44,44 0 1,1 88,0 a 44,44 0 1,1 -88,0"></path>
+          </defs>
+          <circle cx="60" cy="60" r="58" fill="#FFD23F" stroke="#111" stroke-width="2.5"></circle>
+          <text style="font-family: 'Anton', sans-serif; font-size: 15.5px; letter-spacing: 2.5px; fill: #111">
+            <textPath href="#circlePath">ORDER ONLINE ★ OPEN LATE ★</textPath>
+          </text>
+          <text x="60" y="70" text-anchor="middle" style="font-size: 26px">🥙</text>
+        </svg>
+      </div>
+    </section>
+
+    <!-- marquee -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>KEBABS ✦ PIZZA ✦ PIDE ✦ HSP ✦ BURGERS ✦ LAMB CHOPS ✦ SNACK PACKS ✦ BAKLAVA ✦&nbsp;</span>
+        <span>KEBABS ✦ PIZZA ✦ PIDE ✦ HSP ✦ BURGERS ✦ LAMB CHOPS ✦ SNACK PACKS ✦ BAKLAVA ✦&nbsp;</span>
+      </div>
+    </div>
+
+    <!-- popular -->
+    <section class="wrap section" aria-labelledby="popular-heading">
+      <div class="section-head">
+        <h2 class="section-title" id="popular-heading">THE <span class="mark tilt-n">GOOD</span> STUFF</h2>
+        <a href="menu.html" class="link-underline">Full menu →</a>
+      </div>
+      <div class="grid-4">
+        <a class="pop-card tilt-n" href="menu.html#cat-kebabs">
+          <img src="assets/img/kebab-mixed.jpg" width="800" height="600" loading="lazy" alt="Mixed kebab" />
+          <div class="body"><div class="name">MIXED KEBAB</div><span class="price-pill">FROM $16.00</span></div>
+        </a>
+        <a class="pop-card tilt-p" href="menu.html#cat-kebabs">
+          <img src="assets/img/snackpack.jpg" width="800" height="600" loading="lazy" alt="HSP wrap" />
+          <div class="body"><div class="name">HSP WRAP</div><span class="price-pill">$17.50</span></div>
+        </a>
+        <a class="pop-card tilt-n" href="menu.html#cat-pizza">
+          <img src="assets/img/pizza.jpg" width="800" height="600" loading="lazy" alt="BBQ meat lovers pizza" />
+          <div class="body"><div class="name">BBQ MEAT LOVERS</div><span class="price-pill">FROM $20.90</span></div>
+        </a>
+        <a class="pop-card tilt-p" href="menu.html#cat-sides">
+          <img src="assets/img/lamb.jpg" width="800" height="600" loading="lazy" alt="Grilled lamb chops" />
+          <div class="body"><div class="name">LAMB CHOPS</div><span class="price-pill">FROM $10.00</span></div>
+        </a>
+      </div>
+    </section>
+
+    <!-- deals -->
+    <section class="deals" aria-labelledby="deals-heading">
+      <div class="wrap section">
+        <div style="display: flex; align-items: center; gap: 18px; margin-bottom: 34px; flex-wrap: wrap">
+          <h2 class="section-title" id="deals-heading" style="color: #fff">FAMILY DEALS</h2>
+          <span class="tag tilt-p">1.25L DRINK INCLUDED FREE</span>
+        </div>
+        <div class="grid-4">
+          <div class="deal-card"><div class="desc">LARGE PIZZA + LARGE CHIPS + LARGE DRINK</div><div class="amt">$39.90</div></div>
+          <div class="deal-card"><div class="desc">FAMILY PIZZA + LARGE CHIPS + LARGE DRINK</div><div class="amt">$45.90</div></div>
+          <div class="deal-card dark"><div class="desc">2 LARGE PIZZAS + 1.25L DRINK + GARLIC BREAD</div><div class="amt">$54.90</div></div>
+          <div class="deal-card dark"><div class="desc">2 FAMILY PIZZAS + 1.25L DRINK + GARLIC BREAD</div><div class="amt">$61.90</div></div>
+        </div>
+        <a href="menu.html#cat-deals" class="btn btn-white" style="margin-top: 32px">GRAB A DEAL →</a>
+      </div>
+    </section>
+
+    <!-- how it works -->
+    <section class="wrap section" aria-labelledby="how-heading">
+      <h2 class="section-title" id="how-heading" style="margin-bottom: 42px">HOW IT <span class="mark-yellow mark tilt-p">WORKS</span></h2>
+      <div class="grid-3">
+        <div class="step"><div class="num">01</div><h3>PICK YOUR FEED</h3><p>Browse the menu, choose your size, load up on extras.</p></div>
+        <div class="step"><div class="num">02</div><h3>PAY IN SECONDS</h3><p>Checkout online — pickup or delivery, your call.</p></div>
+        <div class="step"><div class="num">03</div><h3>EAT LIKE A LEGEND</h3><p>Track your order live and we'll have it hot and ready.</p></div>
+      </div>
+    </section>
+
+    <!-- testimonials -->
+    <section class="wrap" style="padding-bottom: clamp(48px, 8vw, 90px)">
+      <div class="grid-3">
+        <blockquote class="quote tilt-n"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>"Best HSP I've had, no contest. Chips stay crispy under all that meat. Unreal."</p><cite>— Sarah</cite></blockquote>
+        <blockquote class="quote tilt-p"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>"Ordered online, ready in 15. The family deal fed all of us with change from $60."</p><cite>— Marcus</cite></blockquote>
+        <blockquote class="quote tilt-n"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><p>"Friday night tradition sorted. Kids demand the nuggets, I demand the lamb chops."</p><cite>— The Nguyens</cite></blockquote>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+      <div class="wrap section">
+        <span class="tag-yellow tag wiggle" style="margin-bottom: 22px">⭐ KEBAB 99 REWARDS — EVERY 10TH ORDER'S ON US</span>
+        <h2>HUNGRY? <span class="accent">SORTED.</span></h2>
+        <a href="menu.html" class="btn btn-ghost-light" style="font-size: 21px; padding: 18px 44px">START YOUR ORDER</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="logo">KEBAB <span class="n99">99</span> N PIZZA</div>
+        <p>Family-run kebab &amp; pizza shop. Fresh, fast, and made to share.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <div class="col-links">
+          <a href="menu.html">Menu</a>
+          <a href="order.html">Order online</a>
+          <a href="contact.html">Contact &amp; hours</a>
+        </div>
+      </div>
+      <div>
+        <h4>Visit us</h4>
+        <div class="visit">📍 Add your address<br />📞 Add your phone<br />🕙 11 AM – 10 PM daily</div>
+      </div>
+    </div>
+    <div class="footer-base">© 2026 Kebab 99 N Pizza · Made in Australia 🇦🇺</div>
+  </footer>
+
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

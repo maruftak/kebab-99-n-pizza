@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #F4F1EA; font-family: 'Archivo', sans-serif; }
+    a { color: inherit; text-decoration: none; }
+    input, textarea { font-family: 'Archivo', sans-serif; }
+    input:focus, textarea:focus { outline: none; border-color: #E02D26 !important; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px);} to { opacity: 1; transform: translateY(0);} }
+    @keyframes pinBounce { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-8px);} }
+  </style>
+</helmet>
+
+<div>
+  <nav style="position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:14px 40px;background:#F4F1EA;border-bottom:2px solid #111">
+    <a href="Home.dc.html" style="font-family:'Anton',sans-serif;font-size:24px;letter-spacing:0.01em;color:#111;line-height:1">KEBAB <span style="color:#E02D26">99</span> <span style="font-size:15px">N PIZZA</span></a>
+    <div style="display:flex;align-items:center;gap:32px;font-weight:800;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;color:#111">
+      <a href="Home.dc.html">Home</a>
+      <a href="Menu.dc.html">Menu</a>
+      <a href="Contact.dc.html" style="color:#E02D26">Contact</a>
+      <a href="Order.dc.html" style="background:#E02D26;color:#fff;padding:11px 22px;border-radius:999px;border:2px solid #111;box-shadow:3px 3px 0 #111;transition:all 0.15s" onmouseover="this.style.boxShadow='1px 1px 0 #111';this.style.transform='translate(2px,2px)'" onmouseout="this.style.boxShadow='3px 3px 0 #111';this.style.transform='translate(0,0)'">🛒 Cart{{ cartBadge }}</a>
+    </div>
+  </nav>
+
+  <header style="max-width:1100px;margin:0 auto;padding:60px 40px 10px;text-align:center">
+    <h1 style="font-family:'Anton',sans-serif;font-weight:400;font-size:60px;color:#111;margin:0 0 12px;letter-spacing:0.01em">SAY <span style="background:#E02D26;color:#fff;padding:2px 16px;border-radius:10px;display:inline-block;transform:rotate(-1.5deg)">G'DAY</span></h1>
+    <p style="color:#4a453f;font-size:15px;margin:0;font-weight:600">Questions, catering, feedback — or just tell us how good the HSP was.</p>
+  </header>
+
+  <div style="max-width:1100px;margin:0 auto;padding:44px 40px 110px;display:grid;grid-template-columns:1fr 1.1fr;gap:32px;align-items:start">
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div style="background:#fff;border:2.5px solid #111;border-radius:16px;padding:22px 24px;display:flex;gap:16px;align-items:flex-start;box-shadow:4px 4px 0 #111">
+        <div style="font-size:24px;animation:pinBounce 2.4s ease-in-out infinite">📍</div>
+        <div><div style="font-family:'Anton',sans-serif;font-size:17px;color:#111;margin-bottom:4px;letter-spacing:0.02em">FIND US</div><div style="color:#4a453f;font-size:14px;line-height:1.6;font-weight:600">Add your restaurant address here<br>Australia</div></div>
+      </div>
+      <div style="background:#fff;border:2.5px solid #111;border-radius:16px;padding:22px 24px;display:flex;gap:16px;align-items:flex-start;box-shadow:4px 4px 0 #111">
+        <div style="font-size:24px">📞</div>
+        <div><div style="font-family:'Anton',sans-serif;font-size:17px;color:#111;margin-bottom:4px;letter-spacing:0.02em">CALL OR ORDER BY PHONE</div><a href="tel:+61000000000" style="color:#4a453f;font-size:14px;font-weight:600">Add your phone number</a></div>
+      </div>
+      <div style="background:#fff;border:2.5px solid #111;border-radius:16px;padding:22px 24px;box-shadow:4px 4px 0 #111">
+        <div style="display:flex;gap:16px;align-items:center;margin-bottom:16px">
+          <div style="font-size:24px">🕙</div>
+          <div style="font-family:'Anton',sans-serif;font-size:17px;color:#111;letter-spacing:0.02em">OPENING HOURS</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:14px;color:#4a453f;font-weight:600">
+          <div style="display:flex;justify-content:space-between"><span>Mon – Thu</span><span style="font-weight:800;color:#111">11:00 AM – 10:00 PM</span></div>
+          <div style="display:flex;justify-content:space-between"><span>Fri – Sat</span><span style="font-weight:800;color:#111">11:00 AM – 11:00 PM</span></div>
+          <div style="display:flex;justify-content:space-between"><span>Sunday</span><span style="font-weight:800;color:#111">12:00 PM – 9:00 PM</span></div>
+        </div>
+      </div>
+      <div style="border:2.5px dashed #111;border-radius:16px;overflow:hidden;height:210px;position:relative;background:#fff">
+        <div style="position:absolute;inset:0;opacity:0.35;background-image:radial-gradient(circle,#c9c2b6 1.5px,transparent 1.5px);background-size:20px 20px"></div>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
+          <div style="font-size:32px;animation:pinBounce 2.4s ease-in-out infinite">📍</div>
+          <div style="font-family:'Anton',sans-serif;color:#111;font-size:14px;margin-top:6px;letter-spacing:0.03em">MAP PREVIEW — ADD YOUR LOCATION</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:14px">
+        <a href="#" style="flex:1;text-align:center;background:#111;color:#fff;border:2.5px solid #111;border-radius:12px;padding:14px;font-family:'Anton',sans-serif;font-size:15px;letter-spacing:0.04em;box-shadow:3px 3px 0 rgba(17,17,17,0.3)">FACEBOOK</a>
+        <a href="#" style="flex:1;text-align:center;background:#E02D26;color:#fff;border:2.5px solid #111;border-radius:12px;padding:14px;font-family:'Anton',sans-serif;font-size:15px;letter-spacing:0.04em;box-shadow:3px 3px 0 #111">INSTAGRAM</a>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:2.5px solid #111;border-radius:20px;padding:32px;box-shadow:6px 6px 0 #111">
+      <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}" hint-placeholder-negate="true">
+        <div style="font-family:'Anton',sans-serif;font-size:24px;color:#111;margin-bottom:22px;letter-spacing:0.02em">SEND US A MESSAGE</div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <input placeholder="Your name" value="{{ name }}" oninput="{{ onName }}" style="padding:14px 16px;border-radius:10px;border:2px solid rgba(17,17,17,0.25);font-size:14px;font-weight:600" />
+          <input placeholder="Email" value="{{ email }}" oninput="{{ onEmail }}" style="padding:14px 16px;border-radius:10px;border:2px solid rgba(17,17,17,0.25);font-size:14px;font-weight:600" />
+          <textarea placeholder="Your message" value="{{ message }}" oninput="{{ onMessage }}" rows="5" style="padding:14px 16px;border-radius:10px;border:2px solid rgba(17,17,17,0.25);font-size:14px;resize:vertical;font-weight:600"></textarea>
+          <button onclick="{{ onSubmit }}" disabled="{{ !canSubmit }}" style="background:#E02D26;color:#fff;border:2.5px solid #111;padding:15px;border-radius:12px;font-family:'Anton',sans-serif;font-size:17px;letter-spacing:0.04em;cursor:pointer;box-shadow:4px 4px 0 #111;opacity:{{ submitOpacity }};transition:all 0.15s" onmouseover="this.style.boxShadow='1px 1px 0 #111';this.style.transform='translate(3px,3px)'" onmouseout="this.style.boxShadow='4px 4px 0 #111';this.style.transform='translate(0,0)'">SEND MESSAGE</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center;padding:70px 10px;animation:fadeUp 0.4s ease">
+          <div style="font-size:44px;margin-bottom:14px">✅</div>
+          <div style="font-family:'Anton',sans-serif;font-size:24px;color:#111;margin-bottom:8px;letter-spacing:0.02em">MESSAGE SENT!</div>
+          <p style="color:#4a453f;font-size:14px;font-weight:600">Thanks {{ name }} — we'll get back to you soon.</p>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <footer style="background:#111;padding:40px;color:#9a938c;text-align:center;font-size:13px;font-weight:600">© 2026 Kebab 99 N Pizza · Made in Australia 🇦🇺</footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { cartCount: 0, name: '', email: '', message: '', submitted: false };
+
+  componentDidMount() {
+    try {
+      const cart = JSON.parse(localStorage.getItem('kebab99_cart') || '[]');
+      this.setState({ cartCount: cart.reduce((s,i)=>s+i.qty,0) });
+    } catch(e) {}
+  }
+
+  renderVals() {
+    const canSubmit = this.state.name.trim() && this.state.email.trim() && this.state.message.trim();
+    return {
+      cartBadge: this.state.cartCount > 0 ? ` (${this.state.cartCount})` : '',
+      name: this.state.name, email: this.state.email, message: this.state.message,
+      onName: e => this.setState({ name: e.target.value }),
+      onEmail: e => this.setState({ email: e.target.value }),
+      onMessage: e => this.setState({ message: e.target.value }),
+      canSubmit, submitOpacity: canSubmit ? 1 : 0.5,
+      submitted: this.state.submitted,
+      onSubmit: () => canSubmit && this.setState({ submitted: true }),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

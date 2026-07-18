@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact — Kebab 99 N Pizza</title>
+  <meta name="description" content="Find us, opening hours, and how to reach Kebab 99 N Pizza. Questions, catering or feedback welcome." />
+  <meta name="theme-color" content="#e02d26" />
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <a href="#main" class="visually-hidden">Skip to content</a>
+
+  <header>
+    <nav class="nav" aria-label="Main">
+      <a class="brand" href="index.html">KEBAB <span class="n99">99</span> <span class="sub">N PIZZA</span></a>
+      <button class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="navlinks" aria-label="Toggle navigation">☰</button>
+      <div class="nav-links" id="navlinks" data-nav-links>
+        <a href="index.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="contact.html" aria-current="page">Contact</a>
+        <a class="nav-cart" href="order.html">🛒 Cart<span data-cart-badge></span></a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <header class="wrap page-head center">
+      <h1>SAY <span class="mark tilt-n">G'DAY</span></h1>
+      <p>Questions, catering, feedback — or just tell us how good the HSP was.</p>
+    </header>
+
+    <div class="wrap contact-grid">
+      <!-- info column -->
+      <div class="stack" style="gap: 18px">
+        <div class="info-card">
+          <div class="ic pin-bounce">📍</div>
+          <div><h3>FIND US</h3><div class="val">Add your restaurant address here<br />Australia</div></div>
+        </div>
+        <div class="info-card">
+          <div class="ic">📞</div>
+          <div><h3>CALL OR ORDER BY PHONE</h3><a class="val" href="tel:+61000000000">Add your phone number</a></div>
+        </div>
+        <div class="info-card" style="flex-direction: column; gap: 16px">
+          <div style="display: flex; gap: 16px; align-items: center">
+            <div class="ic">🕙</div>
+            <h3 style="margin: 0">OPENING HOURS</h3>
+          </div>
+          <div class="hours" style="width: 100%">
+            <div class="r"><span>Mon – Thu</span><span>11:00 AM – 10:00 PM</span></div>
+            <div class="r"><span>Fri – Sat</span><span>11:00 AM – 11:00 PM</span></div>
+            <div class="r"><span>Sunday</span><span>12:00 PM – 9:00 PM</span></div>
+          </div>
+        </div>
+        <div class="map">
+          <div class="dots"></div>
+          <div class="pin"><div class="big pin-bounce">📍</div><div class="lbl">MAP PREVIEW — ADD YOUR LOCATION</div></div>
+        </div>
+        <div class="socials">
+          <a class="social fb" href="#" rel="noopener">FACEBOOK</a>
+          <a class="social ig" href="#" rel="noopener">INSTAGRAM</a>
+        </div>
+      </div>
+
+      <!-- form -->
+      <div class="contact-form">
+        <form id="contact-form" novalidate>
+          <h2>SEND US A MESSAGE</h2>
+          <div class="form-fields">
+            <div>
+              <input id="cf-name" name="name" type="text" placeholder="Your name" autocomplete="name" maxlength="80" aria-label="Your name" required />
+            </div>
+            <div>
+              <input id="cf-email" name="email" type="email" placeholder="Email" autocomplete="email" maxlength="120" aria-label="Email" required />
+              <div class="field-error" id="cf-email-err" hidden>Enter a valid email address</div>
+            </div>
+            <div>
+              <textarea id="cf-message" name="message" placeholder="Your message" rows="5" maxlength="1000" aria-label="Your message" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-red btn-block" id="cf-submit">SEND MESSAGE</button>
+          </div>
+        </form>
+        <div class="form-sent" id="cf-sent" hidden>
+          <div class="emoji">✅</div>
+          <h2>MESSAGE SENT!</h2>
+          <p>Thanks <span id="cf-sent-name"></span> — we'll get back to you soon.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer-simple">© 2026 Kebab 99 N Pizza · Made in Australia 🇦🇺</footer>
+
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/contact.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

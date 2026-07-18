@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #F4F1EA; font-family: 'Archivo', sans-serif; }
+    a { color: inherit; text-decoration: none; }
+    input, textarea { font-family: 'Archivo', sans-serif; }
+    input:focus, textarea:focus { outline: none; border-color: #E02D26 !important; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px);} to { opacity: 1; transform: translateY(0);} }
+    @keyframes checkPop { 0%{ transform: scale(0); } 60%{ transform: scale(1.15); } 100%{ transform: scale(1); } }
+    @keyframes dash { to { stroke-dashoffset: 0; } }
+  </style>
+</helmet>
+
+<div style="position:relative;min-height:100vh">
+  <nav style="position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:14px 40px;background:#F4F1EA;border-bottom:2px solid #111">
+    <a href="Home.dc.html" style="font-family:'Anton',sans-serif;font-size:24px;letter-spacing:0.01em;color:#111;line-height:1">KEBAB <span style="color:#E02D26">99</span> <span style="font-size:15px">N PIZZA</span></a>
+    <div style="display:flex;align-items:center;gap:32px;font-weight:800;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;color:#111">
+      <a href="Home.dc.html">Home</a>
+      <a href="Menu.dc.html">Menu</a>
+      <a href="Contact.dc.html">Contact</a>
+      <a href="Order.dc.html" style="color:#E02D26">🛒 Cart{{ cartBadge }}</a>
+    </div>
+  </nav>
+
+  <sc-if value="{{ stage === 'cart' }}" hint-placeholder-val="{{ true }}">
+    <div style="max-width:1100px;margin:0 auto;padding:56px 40px 120px;display:grid;grid-template-columns:1.6fr 1fr;gap:40px;align-items:start">
+      <div>
+        <h1 style="font-family:'Anton',sans-serif;font-weight:400;font-size:56px;color:#111;margin:0 0 26px;letter-spacing:0.01em">YOUR <span style="background:#E02D26;color:#fff;padding:2px 14px;border-radius:10px;display:inline-block;transform:rotate(-1.5deg)">CART</span></h1>
+        <sc-if value="{{ hasItems }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <sc-for list="{{ items }}" as="line" hint-placeholder-count="3">
+              <div style="background:#fff;border:2.5px solid #111;border-radius:16px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:4px 4px 0 #111">
+                <div>
+                  <div style="font-family:'Anton',sans-serif;font-size:17px;color:#111;letter-spacing:0.02em;text-transform:uppercase">{{ line.name }}</div>
+                  <div style="font-size:13px;color:#6E6862;margin-top:2px;font-weight:600">${{ line.priceStr }} each</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:16px">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <button onclick="{{ line.dec }}" style="width:28px;height:28px;border:2px solid #111;border-radius:8px;background:#fff;font-weight:800;cursor:pointer;font-size:14px">−</button>
+                    <span style="font-weight:800;font-size:15px;min-width:16px;text-align:center">{{ line.qty }}</span>
+                    <button onclick="{{ line.inc }}" style="width:28px;height:28px;border:2px solid #111;border-radius:8px;background:#111;color:#fff;font-weight:800;cursor:pointer;font-size:14px">+</button>
+                  </div>
+                  <div style="font-family:'Anton',sans-serif;font-size:17px;color:#E02D26;min-width:70px;text-align:right">${{ line.totalStr }}</div>
+                  <button onclick="{{ line.remove }}" style="background:none;border:none;color:#9a938c;cursor:pointer;font-size:17px;font-weight:700">✕</button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ hasItems }}" hint-placeholder-val="{{ true }}" hint-placeholder-negate="true">
+          <div style="background:#fff;border:2.5px dashed #111;border-radius:20px;padding:70px 20px;text-align:center">
+            <div style="font-size:40px;margin-bottom:12px">🍽️</div>
+            <div style="font-family:'Anton',sans-serif;font-size:22px;color:#111;margin-bottom:10px;letter-spacing:0.02em">NOTHING IN HERE YET</div>
+            <a href="Menu.dc.html" style="color:#E02D26;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:0.04em;border-bottom:2.5px solid #E02D26;padding-bottom:2px">Browse the menu →</a>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="background:#fff;border:2.5px solid #111;border-radius:18px;padding:28px;box-shadow:5px 5px 0 #111;position:sticky;top:100px">
+        <div style="font-family:'Anton',sans-serif;font-size:22px;color:#111;margin-bottom:20px;letter-spacing:0.02em">ORDER SUMMARY</div>
+        <div style="display:flex;justify-content:space-between;font-size:14px;color:#4a453f;margin-bottom:10px;font-weight:600"><span>Subtotal</span><span>${{ subtotal }}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:14px;color:#4a453f;margin-bottom:10px;font-weight:600"><span>Service fee</span><span>${{ serviceFee }}</span></div>
+        <div style="border-top:2.5px dashed rgba(17,17,17,0.25);margin:16px 0"></div>
+        <div style="display:flex;justify-content:space-between;font-family:'Anton',sans-serif;font-size:22px;color:#111;margin-bottom:22px"><span>TOTAL</span><span style="color:#E02D26">${{ total }}</span></div>
+        <button onclick="{{ goCheckout }}" disabled="{{ !hasItems }}" style="width:100%;background:#E02D26;color:#fff;border:2.5px solid #111;padding:15px;border-radius:12px;font-family:'Anton',sans-serif;font-size:18px;letter-spacing:0.04em;cursor:pointer;box-shadow:4px 4px 0 #111;opacity:{{ checkoutOpacity }};transition:all 0.15s" onmouseover="this.style.boxShadow='1px 1px 0 #111';this.style.transform='translate(3px,3px)'" onmouseout="this.style.boxShadow='4px 4px 0 #111';this.style.transform='translate(0,0)'">CHECKOUT →</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ stage === 'checkout' }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:1100px;margin:0 auto;padding:56px 40px 120px;display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:start;animation:fadeUp 0.4s ease">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div>
+          <h1 style="font-family:'Anton',sans-serif;font-weight:400;font-size:48px;color:#111;margin:0 0 22px;letter-spacing:0.01em">CHECKOUT</h1>
+          <div style="display:flex;gap:12px">
+            <button onclick="{{ setPickup }}" style="flex:1;padding:15px;border-radius:12px;font-family:'Anton',sans-serif;font-size:16px;letter-spacing:0.04em;border:2.5px solid #111;cursor:pointer;background:{{ pickupBg }};color:{{ pickupColor }};box-shadow:{{ pickupShadow }}">🛍️ PICKUP</button>
+            <button onclick="{{ setDelivery }}" style="flex:1;padding:15px;border-radius:12px;font-family:'Anton',sans-serif;font-size:16px;letter-spacing:0.04em;border:2.5px solid #111;cursor:pointer;background:{{ deliveryBg }};color:{{ deliveryColor }};box-shadow:{{ deliveryShadow }}">🛵 DELIVERY</button>
+          </div>
+        </div>
+        <div style="background:#fff;border:2.5px solid #111;border-radius:16px;padding:26px;box-shadow:4px 4px 0 #111">
+          <div style="font-family:'Anton',sans-serif;font-size:18px;color:#111;margin-bottom:16px;letter-spacing:0.02em">YOUR DETAILS</div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <input placeholder="Full name" value="{{ name }}" oninput="{{ onName }}" style="padding:13px 16px;border-radius:10px;border:2px solid rgba(17,17,17,0.25);font-size:14px;font-weight:600" />
+            <input placeholder="Phone number" value="{{ phone }}" oninput="{{ onPhone }}" style="padding:13px 16px;border-radius:10px;border:2px solid rgba(17,17,17,0.25);font-size:14px;font-weight:600" />
+            <sc-if value="{{ isDelivery }}" hint-placeholder-val="{{ false }}">
+              <input placeholder="Delivery address" value="{{ address }}" oninput="{{ onAddress }}" style="padding:13px 16px;border-radius:10px;border:2px solid rgba(17,17,17,0.25);font-size:14px;font-weight:600" />
+            </sc-if>
+          </div>
+        </div>
+        <div style="background:#fff;border:2.5px solid #111;border-radius:16px;padding:26px;box-shadow:4px 4px 0 #111">
+          <div style="font-family:'Anton',sans-serif;font-size:18px;color:#111;margin-bottom:16px;letter-spacing:0.02em">PAYMENT</div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <input placeholder="Card number" value="{{ card }}" oninput="{{ onCard }}" maxlength="19" style="padding:13px 16px;border-radius:10px;border:2px solid rgba(17,17,17,0.25);font-size:14px;font-weight:600" />
+            <div style="display:flex;gap:12px">
+              <input placeholder="MM/YY" value="{{ expiry }}" oninput="{{ onExpiry }}" style="flex:1;padding:13px 16px;border-radius:10px;border:2px solid rgba(17,17,17,0.25);font-size:14px;font-weight:600" />
+              <input placeholder="CVC" value="{{ cvc }}" oninput="{{ onCvc }}" style="flex:1;padding:13px 16px;border-radius:10px;border:2px solid rgba(17,17,17,0.25);font-size:14px;font-weight:600" />
+            </div>
+          </div>
+          <p style="font-size:12px;color:#9a938c;margin:14px 0 0;font-weight:600">🔒 Demo checkout — no real payment is processed.</p>
+        </div>
+      </div>
+      <div style="background:#fff;border:2.5px solid #111;border-radius:18px;padding:28px;box-shadow:5px 5px 0 #111;position:sticky;top:100px">
+        <div style="font-family:'Anton',sans-serif;font-size:22px;color:#111;margin-bottom:18px;letter-spacing:0.02em">ORDER SUMMARY</div>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:14px">
+          <sc-for list="{{ items }}" as="line" hint-placeholder-count="3">
+            <div style="display:flex;justify-content:space-between;font-size:13px;color:#4a453f;font-weight:600"><span>{{ line.qty }}× {{ line.name }}</span><span>${{ line.totalStr }}</span></div>
+          </sc-for>
+        </div>
+        <div style="border-top:2.5px dashed rgba(17,17,17,0.25);margin:16px 0"></div>
+        <div style="display:flex;justify-content:space-between;font-family:'Anton',sans-serif;font-size:22px;color:#111;margin-bottom:22px"><span>TOTAL</span><span style="color:#E02D26">${{ total }}</span></div>
+        <button onclick="{{ placeOrder }}" disabled="{{ !canPlace }}" style="width:100%;background:#E02D26;color:#fff;border:2.5px solid #111;padding:15px;border-radius:12px;font-family:'Anton',sans-serif;font-size:17px;letter-spacing:0.04em;cursor:pointer;box-shadow:4px 4px 0 #111;opacity:{{ placeOpacity }};transition:all 0.15s" onmouseover="this.style.boxShadow='1px 1px 0 #111';this.style.transform='translate(3px,3px)'" onmouseout="this.style.boxShadow='4px 4px 0 #111';this.style.transform='translate(0,0)'">PLACE ORDER — ${{ total }}</button>
+        <button onclick="{{ backToCart }}" style="width:100%;background:none;border:none;color:#6E6862;padding:14px;font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:0.04em;cursor:pointer">← Back to cart</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ stage === 'confirmed' }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:660px;margin:0 auto;padding:80px 40px 120px;text-align:center;animation:fadeUp 0.4s ease">
+      <svg width="88" height="88" viewBox="0 0 86 86" style="animation:checkPop 0.5s ease">
+        <circle cx="43" cy="43" r="40" fill="#E02D26" stroke="#111" stroke-width="3" />
+        <path d="M25 44 L38 57 L61 30" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="60" stroke-dashoffset="60" style="animation:dash 0.6s 0.2s ease forwards" />
+      </svg>
+      <h1 style="font-family:'Anton',sans-serif;font-weight:400;font-size:46px;color:#111;margin:22px 0 8px;letter-spacing:0.01em">ORDER CONFIRMED!</h1>
+      <p style="color:#4a453f;font-size:15px;margin:0 0 32px;font-weight:700">Order #{{ orderNumber }} · {{ orderMode }}</p>
+
+      <div style="background:#fff;border:2.5px solid #111;border-radius:20px;padding:34px;box-shadow:6px 6px 0 #111;text-align:left">
+        <div style="font-family:'Anton',sans-serif;font-size:20px;color:#111;margin-bottom:26px;text-align:center;letter-spacing:0.02em">📦 ORDER TRACKING</div>
+        <div style="position:relative;display:flex;justify-content:space-between;margin-bottom:10px">
+          <div style="position:absolute;top:15px;left:24px;right:24px;height:4px;background:#e8e2d6;border-radius:2px;z-index:0"></div>
+          <div style="position:absolute;top:15px;left:24px;height:4px;background:#E02D26;border-radius:2px;z-index:1;transition:width 0.6s ease;width:{{ progressWidth }}"></div>
+          <sc-for list="{{ trackSteps }}" as="step" hint-placeholder-count="4">
+            <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:9px;flex:1">
+              <div style="width:32px;height:32px;border-radius:50%;background:{{ step.bg }};border:2.5px solid #111;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px">{{ step.icon }}</div>
+              <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;color:{{ step.textColor }};text-align:center;max-width:80px">{{ step.label }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <p style="text-align:center;color:#4a453f;font-size:14px;margin:24px 0 0;font-weight:600">{{ trackMessage }}</p>
+      </div>
+
+      <a href="Menu.dc.html" style="display:inline-block;margin-top:30px;color:#E02D26;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:0.04em;border-bottom:2.5px solid #E02D26;padding-bottom:2px">← Order something else</a>
+    </div>
+  </sc-if>
+
+  <footer style="background:#111;padding:40px;color:#9a938c;text-align:center;font-size:13px;font-weight:600">© 2026 Kebab 99 N Pizza · Made in Australia 🇦🇺</footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const TRACK_LABELS = [
+  { icon: '🧾', label: 'Received' },
+  { icon: '🔥', label: 'Preparing' },
+  { icon: '📦', label: 'Ready' },
+  { icon: '✅', label: 'Completed' },
+];
+
+class Component extends DCLogic {
+  state = {
+    cart: [], stage: 'cart', mode: 'pickup',
+    name: '', phone: '', address: '', card: '', expiry: '', cvc: '',
+    orderNumber: null, trackIdx: 0,
+  };
+
+  componentDidMount() {
+    try { this.setState({ cart: JSON.parse(localStorage.getItem('kebab99_cart') || '[]') }); } catch(e) {}
+  }
+
+  componentWillUnmount() { clearInterval(this._track); }
+
+  persist(cart) { localStorage.setItem('kebab99_cart', JSON.stringify(cart)); this.setState({ cart }); }
+  changeQty(key, delta) {
+    const cart = this.state.cart.map(i => i.key === key ? { ...i, qty: Math.max(1, i.qty + delta) } : i);
+    this.persist(cart);
+  }
+  removeItem(key) { this.persist(this.state.cart.filter(i => i.key !== key)); }
+
+  placeOrder() {
+    const num = 'K99-' + Math.floor(1000 + Math.random() * 9000);
+    localStorage.removeItem('kebab99_cart');
+    this.setState({ stage: 'confirmed', orderNumber: num, cart: [], trackIdx: 0 });
+    this._track = setInterval(() => {
+      this.setState(s => {
+        if (s.trackIdx >= 3) { clearInterval(this._track); return {}; }
+        return { trackIdx: s.trackIdx + 1 };
+      });
+    }, 3000);
+  }
+
+  renderVals() {
+    const cart = this.state.cart;
+    const cartCount = cart.reduce((s,i)=>s+i.qty,0);
+    const subtotalNum = cart.reduce((s,i)=>s+i.qty*i.price,0);
+    const serviceFeeNum = cart.length ? 1.5 : 0;
+    const totalNum = subtotalNum + serviceFeeNum;
+    const items = cart.map(line => ({
+      name: line.name, qty: line.qty, priceStr: line.price.toFixed(2), totalStr: (line.price*line.qty).toFixed(2),
+      inc: () => this.changeQty(line.key, 1), dec: () => this.changeQty(line.key, -1), remove: () => this.removeItem(line.key),
+    }));
+    const isDelivery = this.state.mode === 'delivery';
+    const canPlace = this.state.name.trim() && this.state.phone.trim() && this.state.card.trim() && (!isDelivery || this.state.address.trim());
+    const trackIdx = this.state.trackIdx;
+    return {
+      stage: this.state.stage, cartBadge: cartCount > 0 ? ` (${cartCount})` : '',
+      hasItems: cart.length > 0,
+      items, subtotal: subtotalNum.toFixed(2), serviceFee: serviceFeeNum.toFixed(2), total: totalNum.toFixed(2),
+      checkoutOpacity: cart.length ? 1 : 0.5,
+      goCheckout: () => this.setState({ stage: 'checkout' }),
+      backToCart: () => this.setState({ stage: 'cart' }),
+      isDelivery, orderMode: isDelivery ? 'Delivery' : 'Pickup',
+      pickupBg: !isDelivery ? '#E02D26' : '#fff', pickupColor: !isDelivery ? '#fff' : '#111', pickupShadow: !isDelivery ? '4px 4px 0 #111' : 'none',
+      deliveryBg: isDelivery ? '#E02D26' : '#fff', deliveryColor: isDelivery ? '#fff' : '#111', deliveryShadow: isDelivery ? '4px 4px 0 #111' : 'none',
+      setPickup: () => this.setState({ mode: 'pickup' }), setDelivery: () => this.setState({ mode: 'delivery' }),
+      name: this.state.name, phone: this.state.phone, address: this.state.address, card: this.state.card, expiry: this.state.expiry, cvc: this.state.cvc,
+      onName: e => this.setState({ name: e.target.value }), onPhone: e => this.setState({ phone: e.target.value }),
+      onAddress: e => this.setState({ address: e.target.value }), onCard: e => this.setState({ card: e.target.value }),
+      onExpiry: e => this.setState({ expiry: e.target.value }), onCvc: e => this.setState({ cvc: e.target.value }),
+      canPlace, placeOpacity: canPlace ? 1 : 0.5, placeOrder: () => this.placeOrder(),
+      orderNumber: this.state.orderNumber,
+      progressWidth: `${(trackIdx / (TRACK_LABELS.length - 1)) * 100}%`,
+      trackSteps: TRACK_LABELS.map((t, i) => ({
+        icon: t.icon, label: t.label,
+        bg: i <= trackIdx ? '#E02D26' : '#c9c2b6',
+        textColor: i <= trackIdx ? '#111' : '#9a938c',
+      })),
+      trackMessage: trackIdx === 0 ? "We've got your order — the kitchen is up next."
+        : trackIdx === 1 ? 'Your food is on the grill right now. 🔥'
+        : trackIdx === 2 ? (isDelivery ? 'Packed up and heading out for delivery.' : 'Ready for pickup at the counter!')
+        : 'Enjoy your feed! 🎉',
+    };
+  }
+}
+
+</script>
+</body>
+</html>
