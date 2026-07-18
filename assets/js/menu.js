@@ -1,6 +1,8 @@
-/* Renders the menu from window.KEBAB and wires add-to-cart.
-   Everything is built with createElement + textContent — no innerHTML,
-   so nothing in the data (or a future CMS feed) can inject markup. */
+/* Renders the menu from window.KEBAB.
+   Each category leads with a large banner photo (title overlaid); items are
+   clean rows below. This keeps every photo big and appetizing and avoids the
+   same thumbnail repeating down a category. All DOM is built with
+   createElement + textContent — no innerHTML. */
 (function () {
   "use strict";
 
@@ -8,11 +10,23 @@
   var Cart = window.Cart;
   if (!KEBAB || !Cart) return;
 
+  var IMG = "assets/img/";
+  // one representative, distinct photo per category
+  var BANNER = {
+    "cat-kebabs": "kebab-chicken.jpg",
+    "cat-plates": "lamb.jpg",
+    "cat-pizza": "pizza.jpg",
+    "cat-pide": "pide.jpg",
+    "cat-deals": "nachos.jpg",
+    "cat-snack-packs": "snackpack.jpg",
+    "cat-burgers": "burger.jpg",
+    "cat-sides": "fries.jpg",
+    "cat-sweets": "baklava.jpg",
+  };
+
   var selections = {}; // itemId -> chosen size index
 
-  function money(n) {
-    return "$" + Number(n).toFixed(2);
-  }
+  function money(n) { return "$" + Number(n).toFixed(2); }
 
   function el(tag, attrs, kids) {
     var node = document.createElement(tag);
@@ -23,9 +37,7 @@
         else node.setAttribute(k, attrs[k]);
       });
     }
-    (kids || []).forEach(function (c) {
-      if (c) node.appendChild(c);
-    });
+    (kids || []).forEach(function (c) { if (c) node.appendChild(c); });
     return node;
   }
 
@@ -40,12 +52,7 @@
       var idx = selections[item.id] || 0;
       var labels = sizeLabelsFor(item);
       var label = labels[idx];
-      line = {
-        key: item.id + ":" + label,
-        name: item.name + " (" + label + ")",
-        price: item.sizes[idx],
-        qty: 1,
-      };
+      line = { key: item.id + ":" + label, name: item.name + " (" + label + ")", price: item.sizes[idx], qty: 1 };
     } else {
       line = { key: item.id, name: item.name, price: item.price, qty: 1 };
     }
@@ -58,96 +65,67 @@
     var root = document.getElementById("toast-root");
     if (!root) return;
     root.textContent = "";
-    var t = el("div", { class: "toast" }, [document.createTextNode("✅ " + msg)]);
-    root.appendChild(t);
+    root.appendChild(el("div", { class: "toast" }, [document.createTextNode("✅ " + msg)]));
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () {
-      root.textContent = "";
-    }, 2200);
+    toastTimer = setTimeout(function () { root.textContent = ""; }, 2200);
   }
 
-  function buildItemCard(item) {
-    var kids = [];
-
-    // image
-    if (item.img) {
-      kids.push(el("img", {
-        class: "item-img",
-        src: item.img,
-        width: "800",
-        height: "600",
-        loading: "lazy",
-        alt: item.name,
-      }));
-    }
-
-    // name + price
-    var displayPrice = item.sizes ? "from " + money(Math.min.apply(null, item.sizes)) : money(item.price);
-    var top = el("div", { class: "item-top" }, [
-      el("div", { class: "item-name", text: item.name }),
-      el("span", { class: "price-pill", text: displayPrice }),
-    ]);
-    var head = el("div", null, [top]);
-    if (item.desc) head.appendChild(el("p", { class: "item-desc", text: item.desc }));
-    kids.push(head);
-
-    // size buttons
-    if (item.sizes) {
-      var labels = sizeLabelsFor(item);
-      var row = el("div", { class: "sizes", role: "group", "aria-label": item.name + " size" });
-      item.sizes.forEach(function (price, i) {
-        var pressed = (selections[item.id] || 0) === i;
-        var btn = el("button", {
-          type: "button",
-          class: "size-btn",
-          "aria-pressed": pressed ? "true" : "false",
-          text: labels[i] + " " + money(price),
+  function buildSizes(item) {
+    var labels = sizeLabelsFor(item);
+    var row = el("div", { class: "sizes", role: "group", "aria-label": item.name + " size" });
+    item.sizes.forEach(function (price, i) {
+      var pressed = (selections[item.id] || 0) === i;
+      var btn = el("button", { type: "button", class: "size-btn", "aria-pressed": pressed ? "true" : "false", text: labels[i] + " " + money(price) });
+      btn.addEventListener("click", function () {
+        selections[item.id] = i;
+        Array.prototype.forEach.call(row.children, function (c, ci) {
+          c.setAttribute("aria-pressed", ci === i ? "true" : "false");
         });
-        btn.addEventListener("click", function () {
-          selections[item.id] = i;
-          // update pressed state within this group
-          Array.prototype.forEach.call(row.children, function (c, ci) {
-            c.setAttribute("aria-pressed", ci === i ? "true" : "false");
-          });
-        });
-        row.appendChild(btn);
       });
-      kids.push(row);
-    }
+      row.appendChild(btn);
+    });
+    return row;
+  }
 
-    // add button
+  function buildRow(item) {
+    var price = item.sizes ? "from " + money(Math.min.apply(null, item.sizes)) : money(item.price);
+    var head = el("div", { class: "row-head" }, [
+      el("span", { class: "row-name", text: item.name }),
+      el("span", { class: "row-price", text: price }),
+    ]);
+    var kids = [head];
+    if (item.desc) kids.push(el("p", { class: "row-desc", text: item.desc }));
+    if (item.sizes) kids.push(buildSizes(item));
+
     var add = el("button", { type: "button", class: "add-btn", text: "+ ADD TO CART" });
     add.addEventListener("click", function () { addToCart(item); });
-    kids.push(add);
+    kids.push(el("div", { class: "row-foot" }, [add]));
 
-    return el("div", { class: "item" }, kids);
+    return el("div", { class: "menu-row" }, kids);
+  }
+
+  function buildBanner(cat, eager) {
+    var img = el("img", { src: IMG + (BANNER[cat.id] || "hero.jpg"), alt: cat.name, loading: eager ? "eager" : "lazy" });
+    var ovKids = [el("h2", { text: cat.name })];
+    if (cat.subtitle) ovKids.push(el("p", { text: cat.subtitle }));
+    return el("div", { class: "cat-banner" }, [img, el("div", { class: "ov" }, ovKids)]);
   }
 
   function render() {
-    // category rail
     var rail = document.getElementById("cat-rail");
     rail.textContent = "";
     KEBAB.MENU.forEach(function (cat) {
       rail.appendChild(el("a", { href: "#" + cat.id, text: cat.name }));
     });
 
-    // sections
     var root = document.getElementById("menu-root");
     root.textContent = "";
-    KEBAB.MENU.forEach(function (cat) {
+    KEBAB.MENU.forEach(function (cat, ci) {
       var section = el("section", { class: "menu-cat", id: cat.id });
-      var head = el("div", { class: "menu-cat-head" }, [
-        el("h2", { text: cat.name }),
-        el("div", { class: "rule" }),
-      ]);
-      section.appendChild(head);
-      if (cat.subtitle) section.appendChild(el("p", { class: "menu-cat-sub", text: cat.subtitle }));
-
-      var grid = el("div", { class: "menu-grid" });
-      cat.items.forEach(function (item) {
-        grid.appendChild(buildItemCard(item));
-      });
-      section.appendChild(grid);
+      section.appendChild(buildBanner(cat, ci === 0));
+      var list = el("div", { class: "menu-list" });
+      cat.items.forEach(function (item) { list.appendChild(buildRow(item)); });
+      section.appendChild(list);
       root.appendChild(section);
     });
   }

@@ -290,6 +290,25 @@ button { font-family: var(--font-body); cursor: pointer; }
 .cart-bar .count { font-family: var(--font-display); font-size: 18px; letter-spacing: 0.02em; }
 .cart-bar .count .amt { color: var(--red); }
 
+/* category banner (big photo + overlaid title) + clean item rows */
+.cat-banner { position: relative; border: var(--border); border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); margin-bottom: 22px; }
+.cat-banner img { width: 100%; height: clamp(150px, 20vw, 230px); object-fit: cover; display: block; }
+.cat-banner .ov { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px 24px; background: linear-gradient(to top, rgba(17, 17, 17, 0.9) 0%, rgba(17, 17, 17, 0.35) 50%, rgba(17, 17, 17, 0.05) 100%); }
+.cat-banner .ov h2 { font-family: var(--font-display); font-weight: 400; color: #fff; font-size: clamp(1.7rem, 1rem + 3vw, 2.6rem); margin: 0; letter-spacing: 0.02em; text-transform: uppercase; line-height: 1; }
+.cat-banner .ov p { color: rgba(255, 255, 255, 0.9); font-weight: 600; font-size: 13px; margin: 8px 0 0; max-width: 640px; }
+
+.menu-list { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.menu-row { background: #fff; border: var(--border); border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; box-shadow: 3px 3px 0 var(--ink); transition: transform var(--dur); }
+.menu-row:hover { transform: translateY(-2px); }
+.row-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.row-name { font-family: var(--font-display); font-size: 17px; letter-spacing: 0.02em; text-transform: uppercase; line-height: 1.15; }
+.row-price { font-family: var(--font-display); font-size: 18px; color: var(--red); white-space: nowrap; }
+.row-desc { font-size: 12.5px; color: var(--text-soft); line-height: 1.45; margin: 0; font-weight: 500; }
+.row-foot { display: flex; justify-content: flex-end; margin-top: 2px; }
+.row-foot .add-btn { margin-top: 0; padding: 9px 16px; font-size: 13px; border-radius: 9px; }
+
+@media (max-width: 700px) { .menu-list { grid-template-columns: 1fr; } }
+
 /* -------------------------------------------------------- order page ----- */
 .order-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 40px; align-items: start; padding-block: clamp(40px,6vw,56px) 120px; }
 .order-grid.checkout { grid-template-columns: 1.4fr 1fr; }
@@ -444,6 +463,9 @@ input:focus, textarea:focus { outline: none; border-color: var(--red); }
   .hero-frame { transform: none; }
   .hero-media { max-width: 100%; margin-inline: auto; }
   .hero-seal { width: 92px; height: 92px; top: -26px; right: -6px; }
+  .row-foot { justify-content: stretch; }
+  .row-foot .add-btn { width: 100%; }
+  .cat-banner img { height: 150px; }
 }
 
 /* Phones: compact 2-up menu cards so photos aren't oversized (desktop keeps
